@@ -39,6 +39,7 @@ function authenticate(config, stuff, user, accessToken, cb) {
 
     resp.on('end', function() {
       var data = Buffer.concat(body).toString();
+      console.log(data)
 
       if (resp.statusCode !== 200) {
         return cb(Error[resp.statusCode]('unexpected response from github: "' + data + '"'));
