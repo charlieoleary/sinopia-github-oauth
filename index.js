@@ -49,7 +49,7 @@ function authenticate(config, stuff, user, accessToken, cb) {
         return team.organization.login + '.' + team.slug
       });
 
-      if (orgs.indexOf(config.org + '.' + config.team) === -1) {
+      if (teams.indexOf(config.org + '.' + config.team) === -1) {
         return cb(Error[403]('user "' + user + '" is not a member of "' + config.org + '" and/or in team "' + config.team + '"'));
       }
 
