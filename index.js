@@ -50,7 +50,7 @@ function authenticate(config, stuff, user, accessToken, cb) {
       });
 
       if (orgs.indexOf(config.org + '.' + config.team) === -1) {
-        return cb(Error[403]('user "' + user + '" is not a member of "' + config.org + '" and/or in team "' + config.team '"'));
+        return cb(Error[403]('user "' + user + '" is not a member of "' + config.org + '" and/or in team "' + config.team + '"'));
       }
 
       cache[user] = {
