@@ -19,7 +19,8 @@ middlewares:
 
 auth:
   github-oauth:
-    org: soundtrackyourbrand # required, people within this org will be able to auth
+    org: myorg # required, people within this org will be able to auth
+    team: myteam # required, team that the user is a member of
     cache-ttl-ms: 60000 # default to 30s if not present
 ```
 

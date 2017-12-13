@@ -10,17 +10,17 @@ function authenticate(config, stuff, user, accessToken, cb) {
     if (cache[user].expires > Date.now()) {
       // cache hit
       cache[user].expires = Date.now() + cacheTTLms;
-      return cb(null, cache[user].orgs);
+      return cb(null, cache[user].teams);
     }
   }
 
   var opts = {
     host: 'api.github.com',
     port: 443,
-    path: '/user/orgs',
+    path: '/user/teams',
     method: 'GET',
     headers: {
-      'Accept': 'application/json',
+      'Accept': 'application/vnd.github.hellcat-preview+json',
       'User-Agent': stuff.config.user_agent,
       'Authorization': 'Bearer ' + accessToken
     }
@@ -45,17 +45,17 @@ function authenticate(config, stuff, user, accessToken, cb) {
         return cb(Error[resp.statusCode]('unexpected response from github: "' + data + '"'));
       }
 
-      var orgs = JSON.parse(data).map(function(org) {
-        return org.login;
+      var teams = JSON.parse(data).map(function(team) {
+        return team.organization.login + '.' + team.slug
       });
 
-      if (orgs.indexOf(config.org) === -1) {
-        return cb(Error[403]('user "' + user + '" is not a member of "' + config.org + '"'));
+      if (orgs.indexOf(config.org + '.' + config.team) === -1) {
+        return cb(Error[403]('user "' + user + '" is not a member of "' + config.org + '" and/or in team "' + config.team '"'));
       }
 
       cache[user] = {
           token: accessToken,
-          orgs: orgs,
+          teams: teams,
           expires: Date.now() + cacheTTLms
       }
       return cb(null, orgs);
@@ -159,4 +159,3 @@ module.exports = function(config, stuff) {
     register_middlewares: middlewares.bind(undefined, config, stuff)
   }
 };
-
